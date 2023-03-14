@@ -1,0 +1,27 @@
+plugins {
+    id "java"
+    id "org.springframework.boot" version "3.0.4"
+}
+
+group "com.rorym"
+version "1.0-SNAPSHOT"
+
+springBoot {
+    mainClass.set("com.rorym.chess.Chessboard")
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation("org.springframework.boot:spring-boot-starter:3.0.4")
+    implementation("org.springframework.boot:spring-boot-starter-test:3.0.4")
+
+    testImplementation "org.junit.jupiter:junit-jupiter-api:5.8.1"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.8.1"
+}
+
+test {
+    useJUnitPlatform()
+}
