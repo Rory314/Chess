@@ -44,6 +44,7 @@ class Chessboard {
 
     void doMove(Piece piece, Position newPosition) {
         pieceMover.movePiece(pieces, piece, newPosition);
+        // TODO: CaptureChecker/CheckmateChecker/NewQueenChecker/Whatever here after pieceMover
     }
 
 }

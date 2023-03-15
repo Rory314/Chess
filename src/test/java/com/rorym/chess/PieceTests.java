@@ -81,4 +81,22 @@ public class PieceTests {
         Assertions.assertTrue(piece.hasPosition(newPosition));
     }
 
+    @Test
+    void canGetPieceType() {
+
+        PieceType pieceType = PieceType.QUEEN;
+        Piece piece = new Piece(pieceType, Team.WHITE, Position.d8);
+
+        Assertions.assertEquals(pieceType, piece.getPieceType());
+    }
+
+    @Test
+    void canGetPosition() {
+
+        Position position = Position.d8;
+        Piece piece = new Piece(PieceType.QUEEN, Team.WHITE, position);
+
+        Assertions.assertEquals(position, piece.getPosition());
+    }
+
 }

@@ -13,6 +13,14 @@ class Piece {
         this.position = position;
     }
 
+    PieceType getPieceType() {
+        return pieceType;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+
     boolean hasPosition(Position position) {
 
         return this.position == position;
