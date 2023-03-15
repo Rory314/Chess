@@ -99,4 +99,22 @@ public class PieceTests {
         Assertions.assertEquals(position, piece.getPosition());
     }
 
+    @Test
+    void canGetTeam() {
+
+        Team team = Team.BLACK;
+        Piece piece = new Piece(PieceType.KNIGHT, team, Position.c6);
+
+        Assertions.assertEquals(team, piece.getTeam());
+    }
+
+    @Test
+    void beingEqualImpliesSameHashCode() {
+
+        Piece piece1 = new Piece(PieceType.KNIGHT, Team.WHITE, Position.e2);
+        Piece piece2 = new Piece(PieceType.KNIGHT, Team.WHITE, Position.e2);
+
+        Assertions.assertEquals(piece1.hashCode(), piece2.hashCode());
+    }
+
 }

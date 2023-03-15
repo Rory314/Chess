@@ -15,7 +15,7 @@ import java.util.List;
 public class PieceMoverTests {
 
     @Mock
-    StatelessMoveValidator statelessMoveValidator;
+    MoveValidator moveValidator;
     @InjectMocks
     PieceMover pieceMover;
 
@@ -31,28 +31,28 @@ public class PieceMoverTests {
     }
 
     @Test
-    void givenPieceInPiecesListWhenMovePieceRejectedByStatelessMoveValidatorThenThrowIllegalStateExceptionAndDoNotSetNewPositionOfPiece() {
+    void givenPieceInPiecesListWhenMovePieceRejectedByMoveValidatorThenThrowIllegalStateExceptionAndDoNotSetNewPositionOfPiece() {
 
         Position originalPosition = Position.a1;
         Piece piece = new Piece(PieceType.PAWN, Team.WHITE, originalPosition);
         List<Piece> pieces = Collections.singletonList(piece);
         Position newPosition = Position.a2;
 
-        Mockito.when(statelessMoveValidator.isValidMove(piece, newPosition)).thenReturn(false);
+        Mockito.when(moveValidator.isValidMove(Collections.singletonList(piece), piece, newPosition)).thenReturn(false);
         Assertions.assertThrows(IllegalStateException.class, () -> pieceMover.movePiece(pieces, piece, newPosition));
 
         Assertions.assertTrue(piece.hasPosition(originalPosition));
     }
 
     @Test
-    void givenPieceInPiecesListWhenMovePieceAcceptedByStatelessMoveValidatorThenSetNewPositionOfPiece() {
+    void givenPieceInPiecesListWhenMovePieceAcceptedByMoveValidatorThenSetNewPositionOfPiece() {
 
         Position originalPosition = Position.a1;
         Piece piece = new Piece(PieceType.PAWN, Team.WHITE, originalPosition);
         List<Piece> pieces = Collections.singletonList(piece);
         Position newPosition = Position.a2;
 
-        Mockito.when(statelessMoveValidator.isValidMove(piece, newPosition)).thenReturn(true);
+        Mockito.when(moveValidator.isValidMove(Collections.singletonList(piece), piece, newPosition)).thenReturn(true);
         pieceMover.movePiece(pieces, piece, newPosition);
 
         Assertions.assertTrue(piece.hasPosition(newPosition));

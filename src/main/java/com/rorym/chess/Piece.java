@@ -17,13 +17,27 @@ class Piece {
         return pieceType;
     }
 
-    public Position getPosition() {
+    Position getPosition() {
         return position;
     }
 
     boolean hasPosition(Position position) {
 
         return this.position == position;
+    }
+
+    Team getTeam() {
+
+        return team;
+    }
+
+    @Override
+    public String toString() {
+        return "Piece{" +
+                "pieceType=" + pieceType +
+                ", team=" + team +
+                ", position=" + position +
+                '}';
     }
 
     boolean hasTeam(Team team) {

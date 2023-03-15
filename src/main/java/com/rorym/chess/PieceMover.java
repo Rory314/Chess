@@ -7,10 +7,10 @@ import java.util.List;
 @Component
 class PieceMover {
 
-    private final StatelessMoveValidator statelessMoveValidator;
+    private final MoveValidator moveValidator;
 
-    PieceMover(StatelessMoveValidator statelessMoveValidator) {
-        this.statelessMoveValidator = statelessMoveValidator;
+    PieceMover(MoveValidator moveValidator) {
+        this.moveValidator = moveValidator;
     }
 
     void movePiece(List<Piece> pieces, Piece piece, Position newPosition) {
@@ -31,7 +31,7 @@ class PieceMover {
 
     private void ensureValidMove(List<Piece> pieces, Piece piece, Position newPosition) {
 
-        if (!statelessMoveValidator.isValidMove(piece, newPosition)) {
+        if (!moveValidator.isValidMove(pieces, piece, newPosition)) {
             throw new IllegalStateException("Cannot move " + piece + " to " + newPosition);
         }
     }

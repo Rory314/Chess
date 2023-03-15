@@ -7,13 +7,13 @@ import org.junit.jupiter.api.Test;
 import java.util.EnumSet;
 import java.util.List;
 
-public class StatelessMoveValidatorTests {
+public class BoardMoveValidatorTests {
 
-    StatelessMoveValidator statelessMoveValidator;
+    BoardMoveValidator boardMoveValidator;
 
     @BeforeEach
     void setup() {
-        statelessMoveValidator = new StatelessMoveValidator();
+        boardMoveValidator = new BoardMoveValidator();
     }
 
     @Test
@@ -95,10 +95,10 @@ public class StatelessMoveValidatorTests {
         validPositions.forEach(invalidPositions::remove);
 
         for (Position validPosition : validPositions) {
-            Assertions.assertTrue(statelessMoveValidator.isValidMove(piece, validPosition));
+            Assertions.assertTrue(boardMoveValidator.isValidMove(piece, validPosition));
         }
         for (Position invalidPosition : invalidPositions) {
-            Assertions.assertFalse(statelessMoveValidator.isValidMove(piece, invalidPosition));
+            Assertions.assertFalse(boardMoveValidator.isValidMove(piece, invalidPosition));
         }
     }
 

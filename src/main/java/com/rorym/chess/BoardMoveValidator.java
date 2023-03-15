@@ -8,11 +8,12 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
- * This component (currently) validates moves of a pieces regardless of game state (e.g. other pieces, check, first move, etc.)
+ * This component validates moves of a piece as though it were the only piece on the board.
+ * Ignore other pieces, check, first move, etc.
  * A move to current position is not valid.
  */
 @Component
-class StatelessMoveValidator {
+class BoardMoveValidator {
 
     boolean isValidMove(Piece piece, Position newPosition) {
         // Cover simplest (stateless) cases. E.g. ignore pawn moving twice on first move, en passant, etc.
