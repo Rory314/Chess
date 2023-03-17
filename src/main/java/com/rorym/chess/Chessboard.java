@@ -45,6 +45,8 @@ class Chessboard {
     void doMove(Piece piece, Position newPosition) {
         pieceMover.movePiece(pieces, piece, newPosition);
         // TODO: CaptureChecker/CheckmateChecker/NewQueenChecker/Whatever here after pieceMover
+        //  E.g. check position of all pieces, use game state to determine next action (e.g. White pawn and black pawn both have same position, use turn to do capture)
+        //  captureChecker.checkForCapture(pieces, turn);
     }
 
 }

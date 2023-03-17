@@ -1,8 +1,10 @@
 package com.rorym.chess;
 
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Component;
 
 @Component
+@SpringBootApplication
 class Match {
 
     private final Chessboard chessboard;
@@ -15,6 +17,7 @@ class Match {
         this.turn = turn;
     }
 
+    // TODO: Potentially to be used as a controller method, may return a result (e.g. new board state)
     void doMove(Actor actor, Piece piece, Position newPosition) {
 
         checkActorMove(actor);

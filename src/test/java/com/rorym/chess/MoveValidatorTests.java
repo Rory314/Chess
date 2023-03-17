@@ -16,8 +16,6 @@ public class MoveValidatorTests {
 
     @Mock
     BoardMoveValidator boardMoveValidator;
-    @Mock
-    PiecesMoveValidator piecesMoveValidator;
     @InjectMocks
     MoveValidator moveValidator;
 
@@ -25,37 +23,12 @@ public class MoveValidatorTests {
     void givenBoardMoveValidatorRejectsMoveThenRejectMove() {
 
         Piece piece = new Piece(PieceType.QUEEN, Team.BLACK, Position.f5);
+        List<Piece> pieces = Collections.singletonList(piece);
 
-        Mockito.when(boardMoveValidator.isValidMove(piece, Position.e3)).thenReturn(false);
-        boolean isValidMove = moveValidator.isValidMove(Collections.singletonList(piece), piece, Position.e3);
-
-        Assertions.assertFalse(isValidMove);
-    }
-
-    @Test
-    void givenBoardMoveValidatorAcceptsMoveThenRejectIfPiecesMoveValidatorRejects() {
-
-        Piece piece = new Piece(PieceType.QUEEN, Team.BLACK, Position.f5);
-        List<Piece> pieces = List.of(piece, new Piece(PieceType.PAWN, Team.BLACK, Position.f4));
-
-        Mockito.when(boardMoveValidator.isValidMove(piece, Position.f4)).thenReturn(true);
-        Mockito.when(piecesMoveValidator.isValidMove(pieces, piece, Position.f4)).thenReturn(false);
-        boolean isValidMove = moveValidator.isValidMove(pieces, piece, Position.f4);
+        Mockito.when(boardMoveValidator.isValidMove(pieces, piece, Position.e3)).thenReturn(false);
+        boolean isValidMove = moveValidator.isValidMove(pieces, piece, Position.e3);
 
         Assertions.assertFalse(isValidMove);
-    }
-
-    @Test
-    void givenBoardMoveValidatorAcceptsMoveThenAcceptIfPiecesMoveValidatorAccepts() {
-
-        Piece piece = new Piece(PieceType.QUEEN, Team.BLACK, Position.f5);
-        List<Piece> pieces = List.of(piece, new Piece(PieceType.PAWN, Team.BLACK, Position.a1));
-
-        Mockito.when(boardMoveValidator.isValidMove(piece, Position.f4)).thenReturn(true);
-        Mockito.when(piecesMoveValidator.isValidMove(pieces, piece, Position.f4)).thenReturn(true);
-        boolean isValidMove = moveValidator.isValidMove(pieces, piece, Position.f4);
-
-        Assertions.assertTrue(isValidMove);
     }
 
 }
