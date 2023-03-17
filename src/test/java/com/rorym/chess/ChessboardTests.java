@@ -3,6 +3,7 @@ package com.rorym.chess;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -11,12 +12,15 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
 public class ChessboardTests {
 
     @Mock
     PieceMover pieceMover;
+    @Mock
+    CaptureHandler captureHandler;
     @InjectMocks
     Chessboard chessboard;
 
@@ -31,52 +35,7 @@ public class ChessboardTests {
     }
 
     @Test
-    void givenChessboardWithPieceCanGetPieceByPosition() {
-
-        Position position = Position.a8;
-        Piece piece = new Piece(PieceType.ROOK, Team.BLACK, position);
-
-        chessboard.withPiece(piece);
-
-        Assertions.assertEquals(piece, chessboard.getPieceBy(position).get());
-    }
-
-    @Test
-    void givenChessboardWithPieceCanGetPieceListByTeam() {
-
-        Team team = Team.BLACK;
-        Piece piece = new Piece(PieceType.ROOK, team, Position.a8);
-
-        chessboard.withPiece(piece);
-
-        Assertions.assertEquals(Collections.singletonList(piece), chessboard.getPieceBy(team));
-    }
-
-    @Test
-    void givenChessboardWithPieceCanGetPieceListByPieceType() {
-
-        PieceType pieceType = PieceType.ROOK;
-        Piece piece = new Piece(pieceType, Team.BLACK, Position.a8);
-
-        chessboard.withPiece(piece);
-
-        Assertions.assertEquals(Collections.singletonList(piece), chessboard.getPieceBy(pieceType));
-    }
-
-    @Test
-    void givenChessboardWithPieceCanGetPieceListByPieceTypeAndTeam() {
-
-        PieceType pieceType = PieceType.ROOK;
-        Team team = Team.BLACK;
-        Piece piece = new Piece(pieceType, team, Position.a8);
-
-        chessboard.withPiece(piece);
-
-        Assertions.assertEquals(Collections.singletonList(piece), chessboard.getPieceBy(pieceType, team));
-    }
-
-    @Test
-    void givenChessboardWithExistingPieceWhenMoveThenPieceMoverCalled() {
+    void givenChessboardWithExistingPieceWhenMoveThenPieceMoverCalledFollowedByCaptureHandler() {
 
         Piece piece = new Piece(PieceType.PAWN, Team.WHITE, Position.a1);
         List<Piece> pieces = Collections.singletonList(piece);
@@ -85,7 +44,31 @@ public class ChessboardTests {
         chessboard.withPiece(piece);
         chessboard.doMove(piece, newPosition);
 
-        Mockito.verify(pieceMover, Mockito.times(1)).movePiece(pieces, piece, newPosition);
+        InOrder inOrder = Mockito.inOrder(pieceMover, captureHandler);
+        inOrder.verify(pieceMover, Mockito.times(1)).movePiece(pieces, piece, newPosition);
+        inOrder.verify(captureHandler, Mockito.times(1)).handleCapture(pieces, piece);
+    }
+
+    @Test
+    void givenCaptureHandlerReturnsCapturedPieceThenRemoveCapturedPieceFromPieces() {
+
+        Piece piece = new Piece(PieceType.PAWN, Team.WHITE, Position.d7);
+        Position newPosition = Position.d8;
+        Piece capturedPiece = new Piece(PieceType.BISHOP, Team.BLACK, newPosition);
+        List<Piece> pieces = List.of(piece, capturedPiece);
+
+        chessboard.withPiece(piece);
+        chessboard.withPiece(capturedPiece);
+
+        Mockito.doAnswer(invocation -> {
+            ReflectionTestUtils.setField(piece, "position", newPosition);
+            return null;
+        }).when(pieceMover).movePiece(pieces, piece, newPosition);
+        Mockito.when(captureHandler.handleCapture(pieces, piece)).thenReturn(Optional.of(capturedPiece));
+
+        chessboard.doMove(piece, newPosition);
+
+        Assertions.assertEquals(Collections.singletonList(piece), ReflectionTestUtils.getField(chessboard, "pieces"));
     }
 
     // TODO: Something like givenPieceMoverThrowsIllegalStateExceptionThenDoSomething
